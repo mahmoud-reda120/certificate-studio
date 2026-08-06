@@ -6,7 +6,6 @@ import { parseExcelFile } from './excelParser'
 import { setupAutoUpdater } from './updater'
 
 // Chromium SUID sandbox is often misconfigured on Linux; disable for local app use.
-// Prefer launching with NO_SANDBOX=1 (see package.json scripts).
 if (process.platform === 'linux') {
   app.commandLine.appendSwitch('no-sandbox')
   app.commandLine.appendSwitch('disable-gpu-sandbox')
@@ -21,7 +20,7 @@ function createWindow(): void {
     minWidth: 1100,
     minHeight: 700,
     show: false,
-    title: 'Certificate Studio',
+    title: `Certificate Studio v${app.getVersion()}`,
     backgroundColor: '#0f1218',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -140,6 +139,8 @@ function registerIpc(): void {
       return true
     }
   )
+
+  ipcMain.handle(IPC.GET_APP_VERSION, async () => app.getVersion())
 }
 
 app.whenReady().then(() => {

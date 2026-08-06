@@ -1,29 +1,63 @@
 import { app, dialog, BrowserWindow } from 'electron'
+import { autoUpdater } from 'electron-updater'
 
 /**
- * Auto-update from GitHub Releases (electron-builder + electron-updater).
- * Only runs in packaged apps (not `npm run dev`).
+ * Auto-update from GitHub Releases.
+ * Only active in packaged installers (AppImage / NSIS), not npm run dev.
  */
-export async function setupAutoUpdater(getMainWindow: () => BrowserWindow | null): Promise<void> {
-  if (!app.isPackaged) return
+export function setupAutoUpdater(getMainWindow: () => BrowserWindow | null): void {
+  if (!app.isPackaged) {
+    console.log('[updater] skipped — not packaged (dev mode)')
+    return
+  }
 
   try {
-    // Dynamic import keeps dev lighter if module missing temporarily
-    const { autoUpdater } = await import('electron-updater')
     autoUpdater.autoDownload = true
     autoUpdater.autoInstallOnAppQuit = true
+    autoUpdater.allowPrerelease = false
+    // Public repo — no token required for checks
+    autoUpdater.setFeedURL({
+      provider: 'github',
+      owner: 'mahmoud-reda120',
+      repo: 'certificate-studio'
+    })
+
+    autoUpdater.on('checking-for-update', () => {
+      console.log('[updater] checking… current=', app.getVersion())
+    })
 
     autoUpdater.on('update-available', (info) => {
-      const win = getMainWindow()
-      win?.webContents.send('update:status', {
+      console.log('[updater] available', info.version)
+      getMainWindow()?.webContents.send('update:status', {
         status: 'available',
         version: info.version
+      })
+      dialog
+        .showMessageBox({
+          type: 'info',
+          buttons: ['حسناً'],
+          title: 'تحديث متاح',
+          message: `جارٍ تنزيل الإصدار ${info.version}`,
+          detail: `النسخة الحالية: ${app.getVersion()}`
+        })
+        .catch(() => undefined)
+    })
+
+    autoUpdater.on('update-not-available', () => {
+      console.log('[updater] already latest', app.getVersion())
+    })
+
+    autoUpdater.on('error', (err) => {
+      console.error('[updater] error', err)
+      getMainWindow()?.webContents.send('update:status', {
+        status: 'error',
+        message: err?.message ?? String(err)
       })
     })
 
     autoUpdater.on('update-downloaded', async (info) => {
-      const win = getMainWindow()
-      win?.webContents.send('update:status', {
+      console.log('[updater] downloaded', info.version)
+      getMainWindow()?.webContents.send('update:status', {
         status: 'downloaded',
         version: info.version
       })
@@ -34,30 +68,27 @@ export async function setupAutoUpdater(getMainWindow: () => BrowserWindow | null
         cancelId: 1,
         title: 'تحديث جاهز',
         message: `تم تنزيل الإصدار ${info.version}`,
-        detail: 'أعد تشغيل التطبيق لتطبيق التحديث.'
+        detail: 'أعد تشغيل التطبيق لتطبيق التحديث وظهور الميزات الجديدة.'
       })
       if (result.response === 0) {
         autoUpdater.quitAndInstall(false, true)
       }
     })
 
-    autoUpdater.on('error', (err) => {
-      const win = getMainWindow()
-      win?.webContents.send('update:status', {
-        status: 'error',
-        message: err?.message ?? String(err)
+    // Delay so window is ready
+    setTimeout(() => {
+      autoUpdater.checkForUpdates().catch((e) => {
+        console.error('[updater] check failed', e)
       })
-    })
+    }, 2500)
 
-    // Check on launch + every 6 hours
-    await autoUpdater.checkForUpdatesAndNotify()
     setInterval(
       () => {
-        autoUpdater.checkForUpdatesAndNotify().catch(() => undefined)
+        autoUpdater.checkForUpdates().catch(() => undefined)
       },
       6 * 60 * 60 * 1000
     )
   } catch (e) {
-    console.warn('auto-updater unavailable', e)
+    console.error('[updater] setup failed', e)
   }
 }

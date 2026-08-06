@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { useStudioStore } from '../stores/studioStore'
 import { createDefaultProject, type CertificateProject } from '@shared/types'
 import { ThemeToggle } from './ThemeToggle'
@@ -6,6 +7,11 @@ export function WelcomePage() {
   const newProject = useStudioStore((s) => s.newProject)
   const loadProject = useStudioStore((s) => s.loadProject)
   const setTab = useStudioStore((s) => s.setTab)
+  const [version, setVersion] = useState('')
+
+  useEffect(() => {
+    window.certificateAPI?.getAppVersion().then(setVersion).catch(() => undefined)
+  }, [])
 
   const open = async () => {
     if (!window.certificateAPI) {
@@ -22,6 +28,7 @@ export function WelcomePage() {
   return (
     <div className="welcome">
       <div className="welcome-top">
+        {version ? <span className="app-version">v{version}</span> : null}
         <ThemeToggle />
       </div>
       <div className="welcome-hero">

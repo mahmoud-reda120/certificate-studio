@@ -20,7 +20,8 @@ const api = {
   openProject: (filePath: string): Promise<string> =>
     ipcRenderer.invoke(IPC.OPEN_PROJECT, filePath),
   savePdf: (filePath: string, base64Pdf: string): Promise<boolean> =>
-    ipcRenderer.invoke(IPC.SAVE_PDF, filePath, base64Pdf)
+    ipcRenderer.invoke(IPC.SAVE_PDF, filePath, base64Pdf),
+  getAppVersion: (): Promise<string> => ipcRenderer.invoke(IPC.GET_APP_VERSION)
 }
 
 contextBridge.exposeInMainWorld('certificateAPI', api)

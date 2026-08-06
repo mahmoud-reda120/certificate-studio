@@ -8,5 +8,6 @@ export const IPC = {
   PICK_SAVE_PDF: 'dialog:pick-save-pdf',
   PICK_SAVE_PROJECT: 'dialog:pick-save-project',
   PICK_OPEN_PROJECT: 'dialog:pick-open-project',
-  READ_FILE_DATA_URL: 'fs:read-data-url'
+  READ_FILE_DATA_URL: 'fs:read-data-url',
+  GET_APP_VERSION: 'app:get-version'
 } as const
