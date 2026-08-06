@@ -11,6 +11,24 @@ import {
 import { clampRelBox } from '@shared/measure'
 
 type TabId = 'welcome' | 'editor' | 'data' | 'export'
+export type ThemeMode = 'dark' | 'light'
+
+const THEME_KEY = 'cs-theme'
+
+function readStoredTheme(): ThemeMode {
+  try {
+    const v = localStorage.getItem(THEME_KEY)
+    if (v === 'light' || v === 'dark') return v
+  } catch {
+    /* ignore */
+  }
+  return 'dark'
+}
+
+export function applyThemeToDom(theme: ThemeMode): void {
+  document.documentElement.setAttribute('data-theme', theme)
+  document.documentElement.style.colorScheme = theme
+}
 
 interface StudioState {
   project: CertificateProject
@@ -22,8 +40,11 @@ interface StudioState {
   tab: TabId
   snapPx: number
   showGuides: boolean
+  theme: ThemeMode
   exportProgress: { current: number; total: number; message: string } | null
   setTab: (tab: TabId) => void
+  setTheme: (theme: ThemeMode) => void
+  toggleTheme: () => void
   newProject: (name?: string) => void
   loadProject: (project: CertificateProject, path?: string | null) => void
   setProjectName: (name: string) => void
@@ -58,6 +79,9 @@ const emptyExcel: ExcelData = {
   rows: []
 }
 
+const initialTheme = readStoredTheme()
+applyThemeToDom(initialTheme)
+
 export const useStudioStore = create<StudioState>((set, get) => ({
   project: createDefaultProject(),
   projectPath: null,
@@ -68,9 +92,25 @@ export const useStudioStore = create<StudioState>((set, get) => ({
   tab: 'welcome',
   snapPx: 4,
   showGuides: true,
+  theme: initialTheme,
   exportProgress: null,
 
   setTab: (tab) => set({ tab }),
+
+  setTheme: (theme) => {
+    applyThemeToDom(theme)
+    try {
+      localStorage.setItem(THEME_KEY, theme)
+    } catch {
+      /* ignore */
+    }
+    set({ theme })
+  },
+
+  toggleTheme: () => {
+    const next = get().theme === 'dark' ? 'light' : 'dark'
+    get().setTheme(next)
+  },
 
   newProject: (name) =>
     set({

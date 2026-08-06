@@ -1,5 +1,6 @@
 import { useStudioStore } from '../stores/studioStore'
 import { createDefaultProject, type CertificateProject } from '@shared/types'
+import { ThemeToggle } from './ThemeToggle'
 
 export function WelcomePage() {
   const newProject = useStudioStore((s) => s.newProject)
@@ -20,6 +21,9 @@ export function WelcomePage() {
 
   return (
     <div className="welcome">
+      <div className="welcome-top">
+        <ThemeToggle />
+      </div>
       <div className="welcome-hero">
         <p className="eyebrow">Certificate Studio</p>
         <h1>شهادات احترافية بالجملة من Excel</h1>

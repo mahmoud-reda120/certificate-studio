@@ -5,6 +5,7 @@ import { CanvasEditor } from './components/CanvasEditor'
 import { PageSettings } from './components/PageSettings'
 import { DataPanel } from './components/DataPanel'
 import { ExportPanel } from './components/ExportPanel'
+import { ThemeToggle } from './components/ThemeToggle'
 
 export function App() {
   const tab = useStudioStore((s) => s.tab)
@@ -19,10 +20,10 @@ export function App() {
   const excel = useStudioStore((s) => s.excel)
   const newProject = useStudioStore((s) => s.newProject)
   const loadProject = useStudioStore((s) => s.loadProject)
+  const theme = useStudioStore((s) => s.theme)
 
   const save = async () => {
     if (!window.certificateAPI) {
-      // download JSON
       const blob = new Blob([JSON.stringify(project, null, 2)], {
         type: 'application/json'
       })
@@ -53,14 +54,14 @@ export function App() {
 
   if (tab === 'welcome') {
     return (
-      <div className="app">
+      <div className="app" data-theme-shell={theme}>
         <WelcomePage />
       </div>
     )
   }
 
   return (
-    <div className="app shell">
+    <div className="app shell" data-theme-shell={theme}>
       <header className="topbar">
         <div className="brand" onClick={() => setTab('welcome')}>
           <span className="logo">CS</span>
@@ -126,8 +127,10 @@ export function App() {
               >
                 →
               </button>
+              <div className="sep" />
             </>
           )}
+          <ThemeToggle />
           <button className="btn ghost" onClick={() => newProject()}>
             جديد
           </button>

@@ -1,6 +1,6 @@
 {
   "name": "certificate-studio",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Professional bulk certificate generator from Excel templates",
   "main": "./out/main/index.js",
   "author": "Certificate Studio",
