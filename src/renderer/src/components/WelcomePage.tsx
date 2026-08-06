@@ -32,12 +32,16 @@ export function WelcomePage() {
         <ThemeToggle />
       </div>
       <div className="welcome-hero">
-        <p className="eyebrow">Certificate Studio</p>
+        <p className="eyebrow">
+          Certificate Studio
+          {version ? <span className="eyebrow-version"> · v{version}</span> : null}
+        </p>
         <h1>شهادات احترافية بالجملة من Excel</h1>
         <p className="lead">
           اربط كل عمود بمربع مضبوط بالملليمتر والنقطة والـ DPI — معاينة دقيقة ثم PDF
           واحد لكل الطلبة.
         </p>
+        <ThemeToggle prominent />
         <div className="welcome-actions">
           <button className="btn primary large" onClick={() => newProject()}>
             مشروع جديد

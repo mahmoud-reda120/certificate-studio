@@ -112,10 +112,52 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .theme-toggle { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
 .theme-toggle-icon { font-size: 14px; line-height: 1; }
 .theme-toggle-label { font-size: 12px; }
+
+.theme-switch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto 18px;
+}
+.theme-switch-caption {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+.theme-switch-track {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  min-width: 220px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-elev);
+}
+.theme-switch-track button {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: var(--muted);
+  transition: 0.15s ease;
+}
+.theme-switch-track button.active {
+  background: linear-gradient(135deg, var(--accent), #2b6fd6);
+  color: #fff;
+}
+[data-theme='light'] .theme-switch-track button.active {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
 .welcome-top {
   position: absolute;
   top: 16px;
-  left: 16px;
+  inset-inline-start: 16px;
   z-index: 2;
   display: flex;
   align-items: center;
@@ -124,6 +166,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .app-version {
   font-size: 12px;
   color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.eyebrow-version {
+  opacity: 0.85;
   font-variant-numeric: tabular-nums;
 }
 
