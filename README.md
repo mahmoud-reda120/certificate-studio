@@ -6,7 +6,7 @@
 
 بعد نشر أول إصدار:
 
-**https://github.com/OWNER/certificate-studio/releases/latest**
+**https://github.com/mahmoud-reda120/certificate-studio/releases/latest**
 
 - Windows → ملف `.exe`
 - Linux → ملف `.AppImage`
