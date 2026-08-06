@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Certificate Studio
+Name[ar]=ستوديو الشهادات
+Comment=Bulk certificate generator from Excel
+Comment[ar]=توليد شهادات تقدير من Excel بالجملة
+Exec=/bin/bash /home/mahmoud-reda/Documents/certificate-studio/scripts/start-certificate-studio.sh
+Icon=/home/mahmoud-reda/Documents/certificate-studio/assets/icon.png
+Terminal=false
+Categories=Office;Education;
+StartupNotify=true
+Path=/home/mahmoud-reda/Documents/certificate-studio

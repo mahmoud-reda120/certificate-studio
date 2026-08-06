@@ -1,0 +1,68 @@
+{
+  "name": "certificate-studio",
+  "version": "0.1.0",
+  "description": "Professional bulk certificate generator from Excel templates",
+  "main": "./out/main/index.js",
+  "author": "Certificate Studio",
+  "license": "MIT",
+  "scripts": {
+    "dev": "NO_SANDBOX=1 electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "NO_SANDBOX=1 electron-vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.web.json && tsc --noEmit -p tsconfig.node.json",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder",
+    "start": "bash scripts/start-certificate-studio.sh",
+    "app": "bash scripts/start-certificate-studio.sh",
+    "github:init": "bash scripts/publish-to-github.sh",
+    "release": "bash scripts/release.sh"
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.9",
+    "jszip": "^3.10.1",
+    "pdf-lib": "^1.17.1",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^5.0.3"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^34.0.0",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^2.3.0",
+    "typescript": "^5.7.3",
+    "vite": "^5.4.14"
+  },
+  "build": {
+    "appId": "com.certificatestudio.app",
+    "productName": "Certificate Studio",
+    "directories": {
+      "output": "release",
+      "buildResources": "assets"
+    },
+    "files": [
+      "out/**/*",
+      "package.json"
+    ],
+    "linux": {
+      "target": ["AppImage"],
+      "category": "Office",
+      "icon": "assets/icon.png"
+    },
+    "win": {
+      "target": ["nsis"],
+      "icon": "assets/icon.png"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "icon": "assets/icon.png"
+    },
+    "publish": {
+      "provider": "github"
+    }
+  }
+}

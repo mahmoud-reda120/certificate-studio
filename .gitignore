@@ -1,0 +1,15 @@
+node_modules/
+out/
+release/
+dist/
+*.log
+.DS_Store
+.idea/
+.vscode/
+*.AppImage
+*.exe
+*.dmg
+*.blockmap
+*.snap
+.vite/
+samples/*.png
